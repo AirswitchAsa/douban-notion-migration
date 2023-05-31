@@ -2,6 +2,8 @@
 
 forked from [AlieZVzz/Douban-Notion](https://github.com/AlieZVzz/Douban-Notion)
 
+note: the original repo contains movietracker.py that can be used to update the notion database based on recent douban activity. I removed this feature and limited this tool for data migration only.
+
 part of the project notion-marker. to be used for data migration from douban to entry-based data format.
 
 ## usage

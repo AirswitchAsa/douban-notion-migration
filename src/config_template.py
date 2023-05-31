@@ -1,2 +1,2 @@
-databaseid = ''  # fill in your database id
-notion_api = 'Bearer secret_1nRsPRoG2IQQMugHRckEfqUBY5cVhiwsnsAVKt7izEb'  # fill in your notion api key
+page_id = ''  # fill in your page id
+notion_api = 'Bearer <notion api key>'  # fill in your notion api key

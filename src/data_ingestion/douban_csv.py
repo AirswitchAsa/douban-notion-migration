@@ -45,8 +45,8 @@ def fetch_movie_data(movie_url):
     movie_data['actors'] = info_dict.get('主演', '')
     movie_data['iMDb'] = info_dict.get('IMDb', '')
 
-    # movie cover url
-    movie_data['cover_url'] = soup.find('div', class_='article').find_all('img')[0]['src']
+    # movie poster url
+    movie_data['poster'] = soup.find('div', class_='article').find_all('img')[0]['src']
 
     return movie_data
 

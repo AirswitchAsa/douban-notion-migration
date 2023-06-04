@@ -15,12 +15,10 @@ this python script uses the csv files containing the douban entries to create no
 - Tampermonkey (chrome plugin)
 - JavaScript sciprt [豆瓣读书+电影+音乐+游戏+舞台剧导出工具](https://greasyfork.org/zh-CN/scripts/420999-豆瓣读书-电影-音乐-游戏-舞台剧导出工具)
 ####
-- Python >= 3.7
+- Python == 3.11.1
 - beautifulsoup4 == 4.11.1
-- feedparser == 6.0.8
 - requests == 2.28.1
 - numpy == 1.21.6
-- jsonschema == 4.17.3
 ### steps
 1. export the csv files from douban using the script
 2. generate notion API key and provide database id in `config.py`

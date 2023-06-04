@@ -2,13 +2,13 @@ import csv
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
-from builder import DataBuilder
+from data_ingestion.builder import DataBuilder
 
 movie_headers = {
     "Host":
     "movie.douban.com",
     "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.69",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.69",  # noqa
 }
 
 
@@ -38,13 +38,13 @@ def fetch_movie_data(movie_url):
     movie_data['region'] = info_dict.get('制片国家/地区', '')
     movie_data['language'] = info_dict.get('语言', '')
     if '首播' in info_dict:
-        movie_data['release_date'] = info_dict.get('首播', '')
+        movie_data['release'] = info_dict.get('首播', '')
     else:
-        movie_data['release_date'] = info_dict.get('上映日期', '')
+        movie_data['release'] = info_dict.get('上映日期', '')
     movie_data['labels'] = info_dict.get('类型', '')
     movie_data['director'] = info_dict.get('导演', '')
     movie_data['writer'] = info_dict.get('编剧', '')
-    movie_data['actors'] = info_dict.get('主演', '')
+    movie_data['actor'] = info_dict.get('主演', '')
     movie_data['iMDb'] = info_dict.get('IMDb', '')
 
     # movie poster url
@@ -90,12 +90,15 @@ class DoubanCSVBuilder(DataBuilder):
         for created_on, property_url, comment, rating in zip(
                 entry_dict['打分日期'], entry_dict['条目链接'], entry_dict['我的短评'],
                 entry_dict['个人评分']):
+            print(
+                f'fetching movie data for movie #{len(movie_entries)+1} of {len(entry_dict["条目链接"])}'  # noqa
+            )
             movie_data = fetch_movie_data(property_url)
             movie_entry = {
-                'created_on': created_on,
+                'created_on': created_on.replace('/', '-'),
                 'property_url': property_url,
                 'comment': comment,
-                'rating': rating,
+                'rating': int(rating) if rating != '' else None,
                 **movie_data
             }
             movie_entries.append(movie_entry)
@@ -115,6 +118,6 @@ class DoubanCSVBuilder(DataBuilder):
 
 
 if __name__ == '__main__':
-    filename = '../../csv/db-movie-20230530.csv'
+    filename = '../csv/db-movie-20230530.csv'
     builder = DoubanCSVBuilder(movie_csv_path=filename)
     movie_entries = builder.build_movie_entries()

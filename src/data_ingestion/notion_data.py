@@ -1,13 +1,21 @@
-MULTI_SELECT_FIELDS = ['director', 'writer', 'actor', 'region', 'language', 'labels']
+MULTI_SELECT_FIELDS = ['director', 'writer', 'actor', 'region', 'language',
+                       'labels']
 TEXT_FIELDS = ['comment', 'release', 'iMDb']
 DATE_FIELDS = ['created_on']
 NUMBER_FIELDS = ['rating']
 URL_FIELDS = ['property_url']
 FILE_FIELDS = ['poster']
+MOVIE_FIELDS = [
+    'title', 'director', 'writer', 'actor', 'region', 'language', 'labels',
+    'comment', 'release', 'iMDb', 'rating', 'property_url', 'poster',
+    'created_on'
+]
+
 
 def get_schema(fields):
     schema_values = list(map(get_field_schema, fields))
     return dict(zip(fields, schema_values))
+
 
 def generate_property_data(fields, data, field_ids):
     data_values = list(map(get_field_data, fields, data, field_ids))
@@ -33,13 +41,13 @@ def get_field_schema(field_name: str) -> dict:
         case _:
             raise ValueError(f'unknown field name: {field_name}')
 
+
 def get_field_data(field: str, data: str, field_id: str) -> dict:
     match field:
         case field if field in MULTI_SELECT_FIELDS:
-            assert data != '' # assume data is a string of labels separated by '/'
-            return {'id': field_id, 'multi_select': [{'name': label} for label in data.split('/')]} 
+            return {'id': field_id, 'multi_select': [{'name': label} for label in data.split('/')]} # noqa
         case field if field in TEXT_FIELDS:
-            return {'id': field_id, 'rich_text': [{'type': 'text', 'text': {'content': data, 'link': None}}]}
+            return {'id': field_id, 'rich_text': [{'type': 'text', 'text': {'content': data, 'link': None}}]} # noqa
         case field if field in DATE_FIELDS:
             return {'id': field_id, 'date': {'start': data, 'end': None}}
         case field if field in NUMBER_FIELDS:
@@ -47,8 +55,8 @@ def get_field_data(field: str, data: str, field_id: str) -> dict:
         case field if field in URL_FIELDS:
             return {'id': field_id, 'url': data}
         case field if field in FILE_FIELDS:
-            return {'id': field_id, 'files': [{'name': data, 'type': 'external', 'external': {'url': data}}]}
+            return {'id': field_id, 'files': [{'name': 'cover_url', 'type': 'external', 'external': {'url': data}}]} # noqa
         case 'title':
-            return {'id': field_id, 'title': [{'type': 'text', 'text': {'content': data, 'link': None}}]}
+            return {'id': field_id, 'title': [{'type': 'text', 'text': {'content': data, 'link': None}}]} # noqa
         case _:
             raise ValueError(f'unknown field name: {field}')

@@ -1,13 +1,6 @@
 from abc import ABC, abstractmethod
-from schema import movie_schema, book_schema, music_schema, game_schema, drama_schema
 
 class DataBuilder(ABC):
-
-    movie_schema = movie_schema
-    book_schema = book_schema
-    music_schema = music_schema
-    game_schema = game_schema
-    drama_schema = drama_schema
 
     @abstractmethod
     def build_movie_entries(self):

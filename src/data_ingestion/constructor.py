@@ -1,4 +1,6 @@
-from builder import DataBuilder
+from data_ingestion.builder import DataBuilder
+
+MOVIE_FIELDS = ['title', 'director', 'writer', 'actor', 'region', 'language', 'labels', 'comment', 'release', 'iMDb', 'rating', 'property_url', 'poster', 'created_on']
 
 def build_movie_data_for_notion(builder: DataBuilder):
     '''

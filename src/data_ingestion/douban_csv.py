@@ -1,10 +1,8 @@
 import csv
 import numpy as np  
 import requests
-import re
 from bs4 import BeautifulSoup
 from builder import DataBuilder
-from jsonschema import validate
 
 movie_headers = {
     "Host": "movie.douban.com",
@@ -81,9 +79,6 @@ class DoubanCSVBuilder(DataBuilder):
         for created_on, property_url, comment, rating in zip(entry_dict['打分日期'], entry_dict['条目链接'], entry_dict['我的短评'], entry_dict['个人评分']):
             movie_data = fetch_movie_data(property_url)
             movie_entry = {'created_on': created_on, 'property_url': property_url, 'comment': comment, 'rating': rating, **movie_data}
-            # validate movie entry
-            if validate_entry:
-                validate(instance=movie_entry, schema=self.movie_schema)
             movie_entries.append(movie_entry)
         return movie_entries
 

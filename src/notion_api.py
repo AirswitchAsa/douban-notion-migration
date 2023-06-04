@@ -23,12 +23,7 @@ def create_db(page_id, title, property_schema):
     response = requests.post(db_api_address, headers=headers, json=data)
     return response
 
-from data_ingestion.notion_schema import get_movie_schema
-response = create_db(page_id, 'movies', get_movie_schema())
-db_info = json.loads(response.text)
-db_id = db_info['id']
-
-def insert_to_db(db_id, data):
+def insert_to_db(db_id: str, data: dict):
     '''
     update a notion database
     '''
@@ -40,8 +35,6 @@ def insert_to_db(db_id, data):
     response = requests.post(url, headers=headers, json=body)
     return response
 
-from data_ingestion.notion_schema import get_movie_entry_template
-
 
 def query_db(db_id):
     '''
@@ -50,10 +43,13 @@ def query_db(db_id):
     url = db_api_address + db_id + '/query'
     response = requests.post(url, headers=headers, json={})
     data = json.loads(response.content)['results']
-
     return data
 
-test_db_id = '90d2af9e-df29-4f85-9dc8-a41e1d8b6db2'
-data = query_db(test_db_id)
-response = insert_to_db(db_id, get_movie_entry_template())
-print()
+def retrieve_db(db_id):
+    '''
+    query a notion database
+    '''
+    url = db_api_address + db_id
+    response = requests.get(url, headers=headers, json={})
+    data = json.loads(response.content)
+    return data

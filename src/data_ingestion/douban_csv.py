@@ -1,12 +1,14 @@
 import csv
-import numpy as np  
+import numpy as np
 import requests
 from bs4 import BeautifulSoup
 from builder import DataBuilder
 
 movie_headers = {
-    "Host": "movie.douban.com",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.69",
+    "Host":
+    "movie.douban.com",
+    "User-Agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.69",
 }
 
 
@@ -29,7 +31,9 @@ def fetch_movie_data(movie_url):
     # movie info
     base_information = moive_content.find('div', class_='subject clearfix')
     info = base_information.find('div', id='info').text.split('\n')
-    split_info = np.array([info_item.split(': ') for info_item in info if info_item != ''], dtype='object').transpose()
+    split_info = np.array(
+        [info_item.split(': ') for info_item in info if info_item != ''],
+        dtype='object').transpose()
     info_dict = dict(zip(split_info[0], split_info[1]))
     movie_data['region'] = info_dict.get('制片国家/地区', '')
     movie_data['language'] = info_dict.get('语言', '')
@@ -44,13 +48,15 @@ def fetch_movie_data(movie_url):
     movie_data['iMDb'] = info_dict.get('IMDb', '')
 
     # movie poster url
-    movie_data['poster'] = soup.find('div', class_='article').find_all('img')[0]['src']
+    movie_data['poster'] = soup.find(
+        'div', class_='article').find_all('img')[0]['src']
 
     return movie_data
 
+
 def parse_csv(filename):
     entries = []
-    with open(filename,'r') as file:
+    with open(filename, 'r') as file:
         for line in csv.reader(file):
             entries.append(line)
     headers = entries[0]
@@ -61,7 +67,12 @@ def parse_csv(filename):
 
 class DoubanCSVBuilder(DataBuilder):
 
-    def __init__(self, movie_csv_path=None, book_csv_path=None, music_csv_path=None, game_csv_path=None, drama_csv_path=None):
+    def __init__(self,
+                 movie_csv_path=None,
+                 book_csv_path=None,
+                 music_csv_path=None,
+                 game_csv_path=None,
+                 drama_csv_path=None):
         self.movie_csv_path = movie_csv_path
         self.book_csv_path = book_csv_path
         self.music_csv_path = music_csv_path
@@ -76,9 +87,17 @@ class DoubanCSVBuilder(DataBuilder):
 
         # build movie entries
         movie_entries = []
-        for created_on, property_url, comment, rating in zip(entry_dict['打分日期'], entry_dict['条目链接'], entry_dict['我的短评'], entry_dict['个人评分']):
+        for created_on, property_url, comment, rating in zip(
+                entry_dict['打分日期'], entry_dict['条目链接'], entry_dict['我的短评'],
+                entry_dict['个人评分']):
             movie_data = fetch_movie_data(property_url)
-            movie_entry = {'created_on': created_on, 'property_url': property_url, 'comment': comment, 'rating': rating, **movie_data}
+            movie_entry = {
+                'created_on': created_on,
+                'property_url': property_url,
+                'comment': comment,
+                'rating': rating,
+                **movie_data
+            }
             movie_entries.append(movie_entry)
         return movie_entries
 
@@ -93,6 +112,7 @@ class DoubanCSVBuilder(DataBuilder):
 
     def build_drama_entries(self):
         pass
+
 
 if __name__ == '__main__':
     filename = '../../csv/db-movie-20230530.csv'

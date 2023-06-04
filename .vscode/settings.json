@@ -1,6 +1,13 @@
 {
+    "editor.rulers": [120],
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "ms-python.python",
+      "editor.formatOnPaste": false,
+      "editor.formatOnType": false
     },
-    "python.formatting.provider": "none"
-}
+    "editor.detectIndentation": false,
+    "python.formatting.provider": "yapf",
+    "python.linting.flake8Enabled": true,
+    "python.linting.pylintEnabled": false
+  }

@@ -9,7 +9,6 @@ response = create_db(page_id, 'movies', schema)
 db_info = json.loads(response.text)
 created_db_id = db_info['id']
 
-
 test_db_id = '90d2af9e-df29-4f85-9dc8-a41e1d8b6db2'
 data = query_db(test_db_id)
 db_info = retrieve_db(created_db_id)
@@ -25,5 +24,6 @@ test_values = list(test_data.values())
 
 field_ids = [db_schema[field]['id'] for field in test_fields]
 
-response = insert_to_db(db_id, generate_property_data(test_fields, test_values, field_ids))
+response = insert_to_db(
+    db_id, generate_property_data(test_fields, test_values, field_ids))
 print(json.loads(response.text)['message'])

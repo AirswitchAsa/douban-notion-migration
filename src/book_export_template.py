@@ -7,14 +7,16 @@ import time
 import json
 from bs4 import BeautifulSoup
 import os
+
 # Set up Chrome options
 chrome_options = Options()
 # Add any desired options here, 无浏览器模式
-#chrome_options.add_argument('--headless')
+chrome_options.add_argument('--headless')
 
 # Set up the driver
-driver = webdriver.Chrome(ChromeDriverManager().install(),
-                          options=chrome_options)
+service = Service(executable_path=ChromeDriverManager().install())
+
+driver = webdriver.Chrome(service=service, options=chrome_options)
 
 # Go to the page
 # 个人豆瓣主页
